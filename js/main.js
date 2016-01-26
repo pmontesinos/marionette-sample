@@ -63,7 +63,8 @@ app.module('Module', function(module, app, Backbone, Marionette, $, _) {
 			'click .button': 'buttonClick'
 		},
 
-		buttonClick: function() {
+		buttonClick: function(e) {
+			e.preventDefault();
 			console.log('card button clicked');
 		}
 	});
@@ -72,7 +73,7 @@ app.module('Module', function(module, app, Backbone, Marionette, $, _) {
 		template: '#template-store',
 	});
 
-	
+
 
 	module.RootView = Backbone.Marionette.LayoutView.extend({
 		el: '#dashboard',
@@ -130,7 +131,7 @@ app.on('start', function() {
 app.start();
 
 function loadInitialData() {
-	var defer = $.Deferred();	
+	var defer = $.Deferred();
 	console.log('load initial data');
 	return defer.resolve('resolving!');
 }

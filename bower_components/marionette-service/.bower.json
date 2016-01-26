@@ -1,0 +1,47 @@
+{
+  "name": "marionette-service",
+  "version": "0.0.7",
+  "homepage": "https://github.com/benmccormick/marionette-service",
+  "authors": [
+    "Ben McCormick <ben.mccormick@alumni.duke.edu>"
+  ],
+  "description": "Service Objects for Marionette Apps",
+  "main": "dist/marionette-service.js",
+  "moduleType": [
+    "amd",
+    "globals",
+    "node"
+  ],
+  "keywords": [
+    "Marionette",
+    "Backbone",
+    "Backbone.Radio",
+    "Services"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    "src",
+    "gulpfile.js",
+    "package.json"
+  ],
+  "dependencies": {
+    "backbone.marionette": "~2.4.2",
+    "backbone.radio": "~1.0.1",
+    "underscore": "~1.8.3"
+  },
+  "_release": "0.0.7",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.0.7",
+    "commit": "bb6292c941628718497fe950201ff8aabfff46df"
+  },
+  "_source": "git://github.com/benmccormick/marionette-service.git",
+  "_target": "~0.0.7",
+  "_originalSource": "marionette-service",
+  "_direct": true
+}
