@@ -7,7 +7,14 @@ var MarApp = Marionette.Application.extend({
 
 var app = new MarApp({container: '#app'});
 
-app.module('Module', function(module, app, Backbone, Marionette, $, _) {
+app.module('Module', function(module, app, Backbone, Marionette, $, _, Radio, Service) {
+
+	module.FirstService = Service.extend({
+		radioEvents: {
+
+		},
+
+	});
 
 	module.ProfileItem = Backbone.Model.extend({
 		defaults: {
@@ -115,7 +122,7 @@ app.module('Module', function(module, app, Backbone, Marionette, $, _) {
 		var rootView = new module.RootView();
 		rootView.render();
 	});
-});
+}, Backbone.Radio, Mn.Service);
 
 
 
