@@ -9,12 +9,18 @@ var app = new MarApp({container: '#app'});
 
 app.module('Module', function(module, app, Backbone, Marionette, $, _, Radio, Service) {
 
-	module.FirstService = Service.extend({
+	/*module.FirstService = Service.extend({
 		radioEvents: {
 
 		},
 
-	});
+	});*/
+
+	var cardChannel = Radio.channel('card');
+
+	cardChannel.on('card:click', function(str) {
+		return str;
+	}, this);
 
 	module.ProfileItem = Backbone.Model.extend({
 		defaults: {
@@ -32,13 +38,22 @@ app.module('Module', function(module, app, Backbone, Marionette, $, _, Radio, Se
 	module.ProfileItemView = Marionette.ItemView.extend({
 		tagName: 'li',
 		template: '#template-profile-item',
+
+		ui: {
+			label: 'label',
+			input: 'input'
+		},
+
 		events: {
-			'click label': 'labelClick',
-			'click input': 'inputClick'
+			'click @ui.label': 'labelClick',
+			'click @ui.input': 'inputClick'
 		},
 
 		initialize: function() {
 			console.log('initializing ProfileItemView');
+			this.listenTo(cardChannel, 'card:click', function(testStr) {
+				this.ui.input.val(testStr);
+			});
 		},
 
 		labelClick: function() {
@@ -47,6 +62,22 @@ app.module('Module', function(module, app, Backbone, Marionette, $, _, Radio, Se
 
 		inputClick: function() {
 			console.log('clicked the input');
+		},
+
+		fillInput: function(str) {
+			this.ui.input.val(str);
+		},
+
+		onAttach: function() {
+			console.log('onAttach ProfileItemView');
+		},
+		 
+		onRender: function() {
+			console.log('onRender ProfileItemView');
+		},
+
+		 onShow: function(){
+			console.log('onShow ProfileItemView');
 		}
 	});
 
@@ -59,38 +90,71 @@ app.module('Module', function(module, app, Backbone, Marionette, $, _, Radio, Se
 		initialize: function( options ) {
 			this.collection = options.collection;
 			console.log('initializing ProfileListView');
-
 		},
+
+		onAttach: function() {
+			console.log('onAttach ProfileListView');
+		},
+		 
+		onRender: function() {
+			console.log('onRender ProfileListView');
+		},
+
+		onShow: function(){
+			console.log('onShow ProfileListView');
+		}
 	});
 
 
 	module.CardView = Marionette.ItemView.extend({
 		template: '#template-card',
+
+		ui: {
+			button: '.button'
+		},
+
 		events: {
-			'click .button': 'buttonClick'
+			'click @ui.button': 'buttonClick'
 		},
 
 		buttonClick: function(e) {
 			e.preventDefault();
 			console.log('card button clicked');
+			cardChannel.trigger('card:click', 'CardView has been clicked, yo');
+		},
+
+		onAttach: function() {
+			console.log('onAttach CardView');
+		},
+		 
+		onRender: function() {
+			console.log('onRender CardView');
+		},
+
+		onShow: function(){
+			console.log('onShow CardView');
 		}
 	});
 
 	module.StoreView = Marionette.ItemView.extend({
 		template: '#template-store',
+
+		onAttach: function() {
+			console.log('onAttach StoreView');
+		},
+		 
+		onRender: function() {
+			console.log('onRender StoreView');
+		},
+
+		onShow: function(){
+			console.log('onShow StoreView');
+		}
 	});
 
-
-
-	module.RootView = Backbone.Marionette.LayoutView.extend({
-		el: '#dashboard',
+	module.ProfileView = Backbone.Marionette.LayoutView.extend({
+		el: '.profile-section',
 		template: false,
-
-		regions: {
-			profile: '.profile-section',
-			card: '.card-section',
-			store: '.store-details'
-		},
 
 		initialize: function() {
 			this.profileItems = new module.ProfileItems();
@@ -106,14 +170,45 @@ app.module('Module', function(module, app, Backbone, Marionette, $, _, Radio, Se
 			]);
 		},
 
-		 onRender: function() {
-			this.getRegion('profile').show(new module.ProfileListView({collection: this.profileItems}));
+		onShow: function() {
+			//this.addRegion('profile-list', '.profile-list');
+			//this.addRegion('profile-alert', '.profile-alert');
+			//this.getRegion('profile-list').showChildView('profile-list', new module.ProfileListView({collection: this.profileItems}));
+			//this.getRegion('profile-alert').show(new module.ProfileAlertView());
+		}
+
+		
+	});
+
+	module.ProfileAlertView = Backbone.Marionette.ItemView.extend({
+		className: 'alert',
+		template: false
+	});
+
+	module.RootView = Backbone.Marionette.LayoutView.extend({
+		el: '#dashboard',
+		template: false,
+
+		regions: {
+			profile: '.profile-section',
+			card: '.card-section',
+			store: '.store-details'
+		},
+
+		onAttach: function() {
+			console.log('onAttach layoutview');
+			this.getRegion('profile').show(new module.ProfileView());
 			this.getRegion('card').show(new module.CardView());
 			this.getRegion('store').show(new module.StoreView());
 		},
+		 
+		onRender: function() {
+			console.log('onRender layoutview');
+		},
 
 		 onShow: function(){
-			console.log('showing layoutview');
+			console.log('onShow layoutview');
+			
 		}
 
 	});
